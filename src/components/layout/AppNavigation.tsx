@@ -1,5 +1,6 @@
 import { CalendarDays, CheckSquare, Home, Plus, Wallet } from "lucide-react";
 import { NavLink } from "react-router";
+import { useTaskUI } from "../../context/TaskUIContext/useTaskUI";
 const navigationItems = [
   {
     label: "Zadania",
@@ -24,6 +25,7 @@ const navigationItems = [
 ];
 
 function AppNavigation() {
+  const { openCreateTask } = useTaskUI();
   return (
     <nav
       className="
@@ -75,29 +77,24 @@ function AppNavigation() {
 
         <button
           type="button"
+          onClick={openCreateTask}
           aria-label="Dodaj zadanie"
           className="
-            flex
-            size-12
-            items-center
-            justify-center
-            rounded-full
-            bg-blue-600
-            text-white
-            shadow-lg
-            transition
-            hover:bg-blue-700
-            active:scale-95
+    flex size-12 items-center justify-center
+    rounded-full bg-blue-600 text-white
+    shadow-lg transition
+    hover:bg-blue-700
+    active:scale-95
 
-            lg:my-4
-            lg:ml-1
-            lg:size-auto
-            lg:w-full
-            lg:justify-start
-            lg:rounded-xl
-            lg:px-4
-            lg:py-3
-          "
+    lg:my-4
+    lg:ml-1
+    lg:size-auto
+    lg:w-full
+    lg:justify-start
+    lg:rounded-xl
+    lg:px-4
+    lg:py-3
+  "
         >
           <Plus size={22} />
 

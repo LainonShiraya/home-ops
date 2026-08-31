@@ -1,7 +1,11 @@
 export type TaskStatus = "todo" | "in-progress" | "completed"
 
 export type TaskPriority = "low" | "medium" | "high"
-
+export const priorityWeight: Record<TaskPriority, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+}
 export type Task = {
   id: string
   title: string

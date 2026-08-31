@@ -25,7 +25,7 @@ const filters: {
 
 function TaskFilters({ activeFilter, onFilterChange }: TaskFiltersProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1">
+    <div className="flex gap-2 overflow-x-auto pb-2">
       {filters.map((filter) => {
         const isActive = filter.value === activeFilter;
 

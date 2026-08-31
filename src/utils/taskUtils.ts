@@ -1,4 +1,4 @@
-import type { Task } from "../types/task"
+import { priorityWeight, type Task } from "../types/task"
 
 export function toggleTask(task: Task): Task {
   return {
@@ -8,4 +8,11 @@ export function toggleTask(task: Task): Task {
         ? "todo"
         : "completed",
   }
+}
+export function sortTasksByPriority(tasks: Task[]) {
+  return [...tasks].sort(
+    (a, b) =>
+      priorityWeight[a.priority] -
+      priorityWeight[b.priority],
+  )
 }

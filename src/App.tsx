@@ -5,23 +5,25 @@ import DashboardPage from "./pages/DashboardPage";
 import ExpensesPage from "./pages/ExpensesPage";
 import HouseholdPage from "./pages/HouseholdPage";
 import AppLayout from "./components/layout/AppLayout";
-
+import { TaskUIProvider } from "./context/TaskUIContext/TaskUIProvider";
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/tasks" element={<DashboardPage />} />
+      <TaskUIProvider>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/tasks" element={<DashboardPage />} />
 
-          <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
 
-          <Route path="/expenses" element={<ExpensesPage />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
 
-          <Route path="/household" element={<HouseholdPage />} />
-        </Route>
+            <Route path="/household" element={<HouseholdPage />} />
+          </Route>
 
-        <Route path="*" element={<Navigate to="/tasks" replace />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/tasks" replace />} />
+        </Routes>
+      </TaskUIProvider>
     </BrowserRouter>
   );
 }

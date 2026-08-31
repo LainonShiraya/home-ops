@@ -11,9 +11,15 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
   const [category, setCategory] = useState("Dom");
   const [priority, setPriority] = useState<TaskPriority>("medium");
   const [dueDate, setDueDate] = useState("");
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    console.log("SUBMIT", {
+      title,
+      category,
+      priority,
+      dueDate,
+    });
 
     if (!title.trim() || !dueDate) {
       return;
@@ -136,7 +142,6 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
       <div className="flex gap-3 pt-2">
         <button
           type="button"
-          onClick={onCancel}
           className="
             flex-1 rounded-xl
             border border-slate-200
@@ -144,6 +149,7 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
             text-slate-600
             transition hover:bg-slate-50
           "
+          onClick={onCancel}
         >
           Anuluj
         </button>
