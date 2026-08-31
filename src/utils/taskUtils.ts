@@ -10,9 +10,17 @@ export function toggleTask(task: Task): Task {
   }
 }
 export function sortTasksByPriority(tasks: Task[]) {
-  return [...tasks].sort(
-    (a, b) =>
-      priorityWeight[a.priority] -
-      priorityWeight[b.priority],
-  )
+  return [...tasks].sort((a, b) => {
+    // Completed tasks always go to the end
+    if (a.status === "completed" && b.status !== "completed") {
+      return 1;
+    }
+
+    if (a.status !== "completed" && b.status === "completed") {
+      return -1;
+    }
+
+    // Then sort by priority
+    return priorityWeight[a.priority] - priorityWeight[b.priority];
+  });
 }
