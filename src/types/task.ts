@@ -11,3 +11,9 @@ export type Task = {
   assignee: string
   dueDate: string
 }
+export type CreateTaskInput = {
+  title: string
+  category: string
+  priority: TaskPriority
+  dueDate: string
+}

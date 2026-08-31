@@ -1,13 +1,15 @@
 import { CalendarDays, CircleCheck, Circle } from "lucide-react";
 import type { Task } from "../../types/task";
+import { formatDate } from "../../utils/date";
 
 type TaskCardProps = {
   task: Task;
+  onToggle: (taskId: string) => void;
 };
 
-function TaskCard({ task }: TaskCardProps) {
+function TaskCard({ task, onToggle }: TaskCardProps) {
   const isCompleted = task.status === "completed";
-
+  const formattedDueDate = formatDate(task.dueDate);
   return (
     <article
       className="
@@ -21,6 +23,7 @@ function TaskCard({ task }: TaskCardProps) {
     >
       <button
         type="button"
+        onClick={() => onToggle(task.id)}
         aria-label={
           isCompleted
             ? `Oznacz "${task.title}" jako niewykonane`
@@ -52,7 +55,7 @@ function TaskCard({ task }: TaskCardProps) {
 
           <span className="flex items-center gap-1">
             <CalendarDays size={13} />
-            {task.dueDate}
+            {formattedDueDate}
           </span>
         </div>
       </div>
