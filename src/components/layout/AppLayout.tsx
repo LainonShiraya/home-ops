@@ -1,11 +1,8 @@
+import { Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import AppNavigation from "./AppNavigation";
 
-type AppLayoutProps = {
-  children: React.ReactNode;
-};
-
-function AppLayout({ children }: AppLayoutProps) {
+function AppLayout() {
   return (
     <div className="min-h-screen bg-slate-50">
       <AppNavigation />
@@ -13,7 +10,9 @@ function AppLayout({ children }: AppLayoutProps) {
       <div className="lg:pl-60">
         <AppHeader />
 
-        <main>{children}</main>
+        <main>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

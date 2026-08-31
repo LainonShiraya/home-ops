@@ -1,21 +1,25 @@
 import { CalendarDays, CheckSquare, Home, Plus, Wallet } from "lucide-react";
-
+import { NavLink } from "react-router";
 const navigationItems = [
   {
     label: "Zadania",
     icon: CheckSquare,
+    to: "/tasks",
   },
   {
     label: "Kalendarz",
     icon: CalendarDays,
+    to: "/calendar",
   },
   {
     label: "Wydatki",
     icon: Wallet,
+    to: "/expenses",
   },
   {
     label: "Mieszkanie",
     icon: Home,
+    to: "/household",
   },
 ];
 
@@ -34,36 +38,39 @@ function AppNavigation() {
       "
     >
       <div className="flex items-center justify-around lg:flex-col lg:items-stretch lg:gap-2">
-        {navigationItems.map(({ label, icon: Icon }) => (
-          <button
+        {navigationItems.map(({ label, icon: Icon, to }) => (
+          <NavLink
             key={label}
-            type="button"
-            className="
-              flex
-              flex-col
-              items-center
-              justify-center
-              gap-1
-              rounded-xl
-              px-3
-              py-2
-              text-xs
-              text-slate-500
-              transition
-              hover:bg-slate-50
-              hover:text-slate-900
+            to={to}
+            className={({ isActive }) => `
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-1
+    rounded-xl
+    px-3
+    py-2
+    text-xs
+    transition
 
-              lg:flex-row
-              lg:justify-start
-              lg:gap-3
-              lg:px-4
-              lg:py-3
-              lg:text-sm
-            "
+    ${
+      isActive
+        ? "bg-blue-50 text-blue-600"
+        : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+    }
+
+    lg:flex-row
+    lg:justify-start
+    lg:gap-3
+    lg:px-4
+    lg:py-3
+    lg:text-sm
+  `}
           >
             <Icon size={20} />
             <span>{label}</span>
-          </button>
+          </NavLink>
         ))}
 
         <button
