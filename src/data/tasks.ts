@@ -7,7 +7,8 @@ export const tasks: Task[] = [
     category: "Dom",
     status: "todo",
     priority: "medium",
-    assignee: "Konrad",
+    assigneeId: "user-1",
+    repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
   },
   {
@@ -16,7 +17,8 @@ export const tasks: Task[] = [
     category: "Sprzątanie",
     status: "in-progress",
     priority: "high",
-    assignee: "Anna",
+    assigneeId: "user-1",
+    repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
   },
   {
@@ -25,7 +27,8 @@ export const tasks: Task[] = [
     category: "Zakupy",
     status: "completed",
     priority: "low",
-    assignee: "Konrad",
+    assigneeId: "user-1",
+    repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
   },
   {
@@ -34,7 +37,8 @@ export const tasks: Task[] = [
     category: "Dom",
     status: "todo",
     priority: "low",
-    assignee: "Anna",
+    assigneeId: "user-2",
+    repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
   },
   {
@@ -43,7 +47,8 @@ export const tasks: Task[] = [
   category: "Sprzątanie",
   status: "todo",
   priority: "high",
-  assignee: "Konrad",
+  assigneeId: "user-2",
+  repetition: "none",
   dueDate: "2026-09-09T18:00:00",
 },
 {
@@ -52,7 +57,8 @@ export const tasks: Task[] = [
   category: "Dom",
   status: "todo",
   priority: "medium",
-  assignee: "Anna",
+  assigneeId: "user-2",
+  repetition: "none",
  dueDate: "2026-09-09T18:00:00",
 },
 {
@@ -61,7 +67,8 @@ export const tasks: Task[] = [
   category: "Pranie",
   status: "completed",
   priority: "low",
-  assignee: "Konrad",
+  assigneeId: "user-2",
+  repetition: "none",
   dueDate: "2026-09-09T18:00:00",
 },
 {
@@ -70,7 +77,8 @@ export const tasks: Task[] = [
   category: "Zakupy",
   status: "todo",
   priority: "medium",
-  assignee: "Anna",
+  assigneeId: "user-1",
+  repetition: "monthly",
   dueDate: "2026-09-09T18:00:00",
 },
 ]

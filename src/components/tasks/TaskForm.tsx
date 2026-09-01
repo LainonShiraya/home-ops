@@ -1,40 +1,122 @@
-import { useState } from "react";
-import type { CreateTaskInput, TaskPriority } from "../../types/task";
+import { useActionState, useState } from "react";
+import { useFormStatus } from "react-dom";
+
+import type {
+  CreateTaskInput,
+  Task,
+  TaskPriority,
+  TaskRepetition,
+} from "../../types/task";
+import { householdMembers } from "../../data/householdMembers";
 
 type TaskFormProps = {
   onSubmit: (input: CreateTaskInput) => void;
   onCancel: () => void;
+  initialValues?: Task;
+  mode: "create" | "edit";
 };
 
-function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Dom");
-  const [priority, setPriority] = useState<TaskPriority>("medium");
-  const [dueDate, setDueDate] = useState("");
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    console.log("SUBMIT", {
-      title,
-      category,
-      priority,
-      dueDate,
-    });
-
-    if (!title.trim() || !dueDate) {
-      return;
-    }
-
-    onSubmit({
-      title: title.trim(),
-      category,
-      priority,
-      dueDate,
-    });
+type TaskFormState = {
+  errors: {
+    title?: string;
+    dueDate?: string;
   };
+};
+
+const initialState: TaskFormState = {
+  errors: {},
+};
+
+function SubmitButton({ mode }: { mode: "create" | "edit" }) {
+  const { pending } = useFormStatus();
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <button
+      type="submit"
+      disabled={pending}
+      className="
+        flex-1 rounded-xl
+        bg-blue-600 px-4 py-3
+        text-sm font-medium text-white
+        transition
+        hover:bg-blue-700
+        disabled:cursor-not-allowed
+        disabled:opacity-50
+      "
+    >
+      {pending
+        ? "Zapisywanie..."
+        : mode === "edit"
+          ? "Zapisz zmiany"
+          : "Dodaj zadanie"}
+    </button>
+  );
+}
+
+function TaskForm({ onSubmit, onCancel, initialValues, mode }: TaskFormProps) {
+  const [priority, setPriority] = useState<TaskPriority>(
+    initialValues?.priority ?? "medium",
+  );
+
+  const [formState, formAction] = useActionState(
+    async (
+      _previousState: TaskFormState,
+      formData: FormData,
+    ): Promise<TaskFormState> => {
+      const title = String(formData.get("title") ?? "").trim();
+      const dueDate = String(formData.get("dueDate") ?? "");
+
+      const errors: TaskFormState["errors"] = {};
+
+      if (!title) {
+        errors.title = "Nazwa zadania jest wymagana";
+      }
+
+      if (!dueDate) {
+        errors.dueDate = "Termin jest wymagany";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return { errors };
+      }
+
+      const taskInput: CreateTaskInput = {
+        title,
+        category: String(formData.get("category") ?? "Dom"),
+        priority,
+        dueDate,
+        assigneeId: String(formData.get("assigneeId") ?? "user-1"),
+        repetition: formData.get("repetition") as TaskRepetition,
+      };
+
+      onSubmit(taskInput);
+
+      return {
+        errors: {},
+      };
+    },
+    initialState,
+  );
+
+  const today = new Date();
+
+  const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
+
+  const minDate = initialValues?.dueDate
+    ? initialValues.dueDate < todayString
+      ? initialValues.dueDate
+      : todayString
+    : todayString;
+
+  console.log("EDIT DATE:", initialValues?.dueDate);
+  return (
+    <form action={formAction} className="space-y-5">
+      {/* Title */}
+
       <div>
         <label
           htmlFor="title"
@@ -45,9 +127,9 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
 
         <input
           id="title"
+          name="title"
           type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          defaultValue={initialValues?.title ?? ""}
           placeholder="Np. odkurzyć mieszkanie"
           className="
             w-full rounded-xl border border-slate-200
@@ -57,7 +139,13 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
             focus:ring-2 focus:ring-blue-100
           "
         />
+
+        {formState.errors.title && (
+          <p className="mt-1 text-sm text-red-600">{formState.errors.title}</p>
+        )}
       </div>
+
+      {/* Category */}
 
       <div>
         <label
@@ -69,8 +157,8 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
 
         <select
           id="category"
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
+          name="category"
+          defaultValue={initialValues?.category ?? "Dom"}
           className="
             w-full rounded-xl border border-slate-200
             bg-white px-4 py-3 text-sm
@@ -86,8 +174,12 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
         </select>
       </div>
 
+      {/* Priority */}
+
       <div>
         <p className="mb-2 text-sm font-medium text-slate-700">Priorytet</p>
+
+        <input type="hidden" name="priority" value={priority} />
 
         <div className="grid grid-cols-3 gap-2">
           {(
@@ -116,6 +208,38 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
         </div>
       </div>
 
+      {/* Assignee */}
+
+      <div>
+        <label
+          htmlFor="assigneeId"
+          className="mb-2 block text-sm font-medium text-slate-700"
+        >
+          Przypisz do
+        </label>
+
+        <select
+          id="assigneeId"
+          name="assigneeId"
+          defaultValue={initialValues?.assigneeId ?? "user-1"}
+          className="
+            w-full rounded-xl border border-slate-200
+            bg-white px-4 py-3 text-sm
+            outline-none
+            focus:border-blue-500
+            focus:ring-2 focus:ring-blue-100
+          "
+        >
+          {householdMembers.map((member) => (
+            <option key={member.id} value={member.id}>
+              {member.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Due date */}
+
       <div>
         <label
           htmlFor="dueDate"
@@ -126,9 +250,10 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
 
         <input
           id="dueDate"
+          name="dueDate"
           type="date"
-          value={dueDate}
-          onChange={(event) => setDueDate(event.target.value)}
+          min={minDate}
+          defaultValue={initialValues?.dueDate?.split("T")[0] ?? ""}
           className="
             w-full rounded-xl border border-slate-200
             bg-white px-4 py-3 text-sm
@@ -137,11 +262,49 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
             focus:ring-2 focus:ring-blue-100
           "
         />
+
+        {formState.errors.dueDate && (
+          <p className="mt-1 text-sm text-red-600">
+            {formState.errors.dueDate}
+          </p>
+        )}
       </div>
+
+      {/* Repetition */}
+
+      <div>
+        <label
+          htmlFor="repetition"
+          className="mb-2 block text-sm font-medium text-slate-700"
+        >
+          Powtarzanie
+        </label>
+
+        <select
+          id="repetition"
+          name="repetition"
+          defaultValue={initialValues?.repetition ?? "none"}
+          className="
+            w-full rounded-xl border border-slate-200
+            bg-white px-4 py-3 text-sm
+            outline-none
+            focus:border-blue-500
+            focus:ring-2 focus:ring-blue-100
+          "
+        >
+          <option value="none">Nie powtarza się</option>
+          <option value="daily">Codziennie</option>
+          <option value="weekly">Co tydzień</option>
+          <option value="monthly">Co miesiąc</option>
+        </select>
+      </div>
+
+      {/* Actions */}
 
       <div className="flex gap-3 pt-2">
         <button
           type="button"
+          onClick={onCancel}
           className="
             flex-1 rounded-xl
             border border-slate-200
@@ -149,26 +312,11 @@ function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
             text-slate-600
             transition hover:bg-slate-50
           "
-          onClick={onCancel}
         >
           Anuluj
         </button>
 
-        <button
-          type="submit"
-          disabled={!title.trim() || !dueDate}
-          className="
-            flex-1 rounded-xl
-            bg-blue-600 px-4 py-3
-            text-sm font-medium text-white
-            transition
-            hover:bg-blue-700
-            disabled:cursor-not-allowed
-            disabled:opacity-50
-          "
-        >
-          Dodaj zadanie
-        </button>
+        <SubmitButton mode={mode} />
       </div>
     </form>
   );
