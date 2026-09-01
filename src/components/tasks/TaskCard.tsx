@@ -1,15 +1,23 @@
 import { CalendarDays, CircleCheck, Circle } from "lucide-react";
 import type { Task } from "../../types/task";
 import { formatDate } from "../../utils/date";
+import { householdMembers } from "../../data/householdMembers";
+import { repetitionLabels } from "../../utils/taskUtils";
 
 type TaskCardProps = {
   task: Task;
   onToggle: (taskId: string) => void;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
 };
 
-function TaskCard({ task, onToggle }: TaskCardProps) {
+function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
   const isCompleted = task.status === "completed";
   const formattedDueDate = formatDate(task.dueDate);
+  const assignee = householdMembers.find(
+    (member) => member.id === task.assigneeId,
+  );
+
   return (
     <article
       className="
@@ -58,11 +66,16 @@ function TaskCard({ task, onToggle }: TaskCardProps) {
             {formattedDueDate}
           </span>
         </div>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+          <span>🔁 {repetitionLabels[task.repetition]}</span>
+        </div>
       </div>
 
-      <span
-        className={`
-          shrink-0 rounded-full px-2.5 py-1 text-xs font-medium
+      <div className="ml-4 flex shrink-0 flex-col items-end gap-1">
+        <span
+          className={`
+          shrink-0 rounded-full px-2.5 py-1 text-xs font-medium px-4 py-1 
+          flex-1 min-w-[60px]
           ${
             task.priority === "high"
               ? "bg-red-50 text-red-600"
@@ -71,13 +84,41 @@ function TaskCard({ task, onToggle }: TaskCardProps) {
                 : "bg-slate-100 text-slate-500"
           }
         `}
-      >
-        {task.priority === "high"
-          ? "Wysoki"
-          : task.priority === "medium"
-            ? "Średni"
-            : "Niski"}
-      </span>
+        >
+          {task.priority === "high"
+            ? "Wysoki"
+            : task.priority === "medium"
+              ? "Średni"
+              : "Niski"}
+        </span>
+        <p className="text-sm text-slate-500 flex-1 min-w-[70px]">
+          👤 {assignee?.name ?? "Nieprzypisane"}
+        </p>
+        <div className="flex flex-col gap-1 min-[500px]:flex-row">
+          <button
+            className="text-sm text-slate-500 rounded-full bg-blue-600 text-white
+    shadow-lg transition
+    hover:bg-blue-700
+    active:scale-95 px-4 py-1
+    flex-1 min-w-[60px]"
+            type="button"
+            onClick={() => onEdit(task)}
+          >
+            Edytuj
+          </button>
+          <button
+            className="text-sm text-slate-500 rounded-full bg-red-600 text-white
+    shadow-lg transition
+    hover:bg-red-700
+    active:scale-95 px-4 py-1
+    flex-1 min-w-[60px]"
+            type="button"
+            onClick={() => onDelete(task)}
+          >
+            Usuń
+          </button>
+        </div>
+      </div>
     </article>
   );
 }
