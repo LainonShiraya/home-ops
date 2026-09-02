@@ -13,7 +13,6 @@ type TaskFormProps = {
   onSubmit: (input: TaskInput) => void;
   onCancel: () => void;
   initialValues?: Task;
-  mode: "create" | "edit";
 };
 
 type TaskFormState = {
@@ -27,7 +26,7 @@ const initialState: TaskFormState = {
   errors: {},
 };
 
-function SubmitButton({ mode }: { mode: "create" | "edit" }) {
+function SubmitButton({ isEditButton }: { isEditButton: boolean }) {
   const { pending } = useFormStatus();
 
   return (
@@ -46,14 +45,14 @@ function SubmitButton({ mode }: { mode: "create" | "edit" }) {
     >
       {pending
         ? "Zapisywanie..."
-        : mode === "edit"
+        : isEditButton
           ? "Zapisz zmiany"
           : "Dodaj zadanie"}
     </button>
   );
 }
 
-function TaskForm({ onSubmit, onCancel, initialValues, mode }: TaskFormProps) {
+function TaskForm({ onSubmit, onCancel, initialValues }: TaskFormProps) {
   const [priority, setPriority] = useState<TaskPriority>(
     initialValues?.priority ?? "medium",
   );
@@ -316,7 +315,7 @@ function TaskForm({ onSubmit, onCancel, initialValues, mode }: TaskFormProps) {
           Anuluj
         </button>
 
-        <SubmitButton mode={mode} />
+        <SubmitButton isEditButton={!!initialValues} />
       </div>
     </form>
   );

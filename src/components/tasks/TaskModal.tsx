@@ -49,7 +49,7 @@ function TaskModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-labelledby="create-task-title"
+      aria-labelledby="task-modal-title"
       onMouseDown={handleOverlayClick}
       className="
   fixed inset-0 z-50
@@ -73,7 +73,7 @@ function TaskModal({
       >
         <div className="mb-6 flex items-center justify-between">
           <h2
-            id="create-task-title"
+            id="task-modal-title"
             className="text-xl font-semibold text-slate-900"
           >
             Nowe zadanie
@@ -99,7 +99,6 @@ function TaskModal({
         <TaskForm
           onSubmit={onSubmit}
           onCancel={onClose}
-          mode={initialValues ? "edit" : "create"}
           initialValues={initialValues}
         />
       </div>
