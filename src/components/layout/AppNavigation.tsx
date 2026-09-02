@@ -25,7 +25,7 @@ const navigationItems = [
 ];
 
 function AppNavigation() {
-  const { openCreateTask } = useTaskUI();
+  const { openTaskModal } = useTaskUI();
   return (
     <nav
       className="
@@ -77,7 +77,7 @@ function AppNavigation() {
 
         <button
           type="button"
-          onClick={openCreateTask}
+          onClick={openTaskModal}
           aria-label="Dodaj zadanie"
           className="
     flex size-12 items-center justify-center

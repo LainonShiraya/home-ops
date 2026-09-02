@@ -2,21 +2,21 @@ import { useEffect, type MouseEvent } from "react";
 import { X } from "lucide-react";
 
 import TaskForm from "./TaskForm";
-import type { CreateTaskInput, Task } from "../../types/task";
+import type { TaskInput, Task } from "../../types/task";
 
-type CreateTaskModalProps = {
+type TaskModalProps = {
   isOpen: boolean;
-  onSubmit: (input: CreateTaskInput) => void;
+  onSubmit: (input: TaskInput) => void;
   onClose: () => void;
   initialValues?: Task;
 };
 
-function CreateTaskModal({
+function TaskModal({
   isOpen,
   onSubmit,
   onClose,
   initialValues,
-}: CreateTaskModalProps) {
+}: TaskModalProps) {
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -49,7 +49,7 @@ function CreateTaskModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-labelledby="create-task-title"
+      aria-labelledby="task-modal-title"
       onMouseDown={handleOverlayClick}
       className="
   fixed inset-0 z-50
@@ -73,7 +73,7 @@ function CreateTaskModal({
       >
         <div className="mb-6 flex items-center justify-between">
           <h2
-            id="create-task-title"
+            id="task-modal-title"
             className="text-xl font-semibold text-slate-900"
           >
             Nowe zadanie
@@ -99,7 +99,6 @@ function CreateTaskModal({
         <TaskForm
           onSubmit={onSubmit}
           onCancel={onClose}
-          mode={initialValues ? "edit" : "create"}
           initialValues={initialValues}
         />
       </div>
@@ -107,4 +106,4 @@ function CreateTaskModal({
   );
 }
 
-export default CreateTaskModal;
+export default TaskModal;
