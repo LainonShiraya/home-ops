@@ -1,26 +1,27 @@
 import TaskCard from "../components/tasks/TaskCard";
-import { tasks } from "../data/tasks";
 import TaskFilters, { type TaskFilter } from "../components/tasks/TaskFilters";
 import TaskStats from "../components/tasks/TaskStats";
 import { useState } from "react";
-import { sortTasksByPriority, toggleTask } from "../utils/taskUtils";
+import { sortTasksByPriority } from "../utils/taskUtils";
 import { useTaskUI } from "../context/TaskUIContext/useTaskUI";
-import CreateTaskModal from "../components/tasks/CreateTaskModal";
-import type { CreateTaskInput, Task } from "../types/task";
+import TaskModal from "../components/tasks/TaskModal";
+import type { TaskInput, Task } from "../types/task";
 import TaskDeleteModal from "../components/tasks/TaskDeleteModal";
+import { useTasks } from "../hooks/useTasks";
 
 function DashboardPage() {
   const [activeFilter, setActiveFilter] = useState<TaskFilter>("all");
-  const [taskList, setTaskList] = useState(tasks);
-  const myTasks = taskList.filter((task) => task.assigneeId === "user-1");
-  const { isCreateTaskOpen, openCreateTask, closeCreateTask } = useTaskUI();
+  const { isTaskModalOpen, openTaskModal, closeTaskModal } = useTaskUI();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const { tasks, createTask, updateTask, deleteTask, toggleTaskStatus } =
+    useTasks();
+  const myTasks = tasks.filter((task) => task.assigneeId === "user-1");
 
-  const completedTasks = taskList.filter((task) => task.status === "completed");
+  const completedTasks = tasks.filter((task) => task.status === "completed");
 
   const filteredTasks = sortTasksByPriority(
-    taskList.filter((task) => {
+    tasks.filter((task) => {
       switch (activeFilter) {
         case "mine":
           return task.assigneeId === "user-1";
@@ -34,57 +35,32 @@ function DashboardPage() {
     }),
   );
 
-  const handleToggleTask = (taskId: string) => {
-    setTaskList((prev) =>
-      prev.map((task) => (task.id === taskId ? toggleTask(task) : task)),
-    );
-  };
-
-  const handleCreateTask = (input: CreateTaskInput) => {
+  const handleCreateTask = (input: TaskInput) => {
+    createTask(input);
     setSelectedTask(null);
-    const newTask = {
-      id: Date.now().toString(),
-      ...input,
-      status: "todo" as const,
-      assignee: "Konrad",
-    };
-
-    setTaskList((prev) => [newTask, ...prev]);
+    closeTaskModal();
   };
 
-  const handleUpdateTask = (input: CreateTaskInput) => {
+  const handleUpdateTask = (input: TaskInput) => {
     if (!selectedTask) {
       return;
     }
 
-    setTaskList((prev) =>
-      prev.map((task) =>
-        task.id === selectedTask.id
-          ? {
-              ...task,
-              ...input,
-            }
-          : task,
-      ),
-    );
-
+    updateTask(selectedTask.id, input);
     setSelectedTask(null);
-    closeCreateTask();
+    closeTaskModal();
   };
   const handleEditTask = (task: Task) => {
-    openCreateTask();
     setSelectedTask(task);
-  };
-
-  const handleDeleteTask = (task: Task) => {
-    setTaskToDelete(task);
+    openTaskModal();
   };
 
   const confirmDeleteTask = () => {
     if (!taskToDelete) {
       return;
     }
-    setTaskList((prev) => prev.filter((task) => task.id !== taskToDelete.id));
+
+    deleteTask(taskToDelete.id);
     setTaskToDelete(null);
   };
 
@@ -109,18 +85,18 @@ function DashboardPage() {
           <TaskCard
             key={task.id}
             task={task}
-            onToggle={handleToggleTask}
+            onToggle={toggleTaskStatus}
             onEdit={handleEditTask}
-            onDelete={handleDeleteTask}
+            onDelete={setTaskToDelete}
           />
         ))}
       </section>
-      <CreateTaskModal
-        isOpen={isCreateTaskOpen}
+      <TaskModal
+        isOpen={isTaskModalOpen}
         onSubmit={selectedTask ? handleUpdateTask : handleCreateTask}
         onClose={() => {
           setSelectedTask(null);
-          closeCreateTask();
+          closeTaskModal();
         }}
         initialValues={selectedTask ?? undefined}
       />

@@ -2,7 +2,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import type {
-  CreateTaskInput,
+  TaskInput,
   Task,
   TaskPriority,
   TaskRepetition,
@@ -10,7 +10,7 @@ import type {
 import { householdMembers } from "../../data/householdMembers";
 
 type TaskFormProps = {
-  onSubmit: (input: CreateTaskInput) => void;
+  onSubmit: (input: TaskInput) => void;
   onCancel: () => void;
   initialValues?: Task;
   mode: "create" | "edit";
@@ -80,7 +80,7 @@ function TaskForm({ onSubmit, onCancel, initialValues, mode }: TaskFormProps) {
         return { errors };
       }
 
-      const taskInput: CreateTaskInput = {
+      const taskInput: TaskInput = {
         title,
         category: String(formData.get("category") ?? "Dom"),
         priority,

@@ -2,21 +2,21 @@ import { useEffect, type MouseEvent } from "react";
 import { X } from "lucide-react";
 
 import TaskForm from "./TaskForm";
-import type { CreateTaskInput, Task } from "../../types/task";
+import type { TaskInput, Task } from "../../types/task";
 
-type CreateTaskModalProps = {
+type TaskModalProps = {
   isOpen: boolean;
-  onSubmit: (input: CreateTaskInput) => void;
+  onSubmit: (input: TaskInput) => void;
   onClose: () => void;
   initialValues?: Task;
 };
 
-function CreateTaskModal({
+function TaskModal({
   isOpen,
   onSubmit,
   onClose,
   initialValues,
-}: CreateTaskModalProps) {
+}: TaskModalProps) {
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -107,4 +107,4 @@ function CreateTaskModal({
   );
 }
 
-export default CreateTaskModal;
+export default TaskModal;

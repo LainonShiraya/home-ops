@@ -6,22 +6,22 @@ type TaskUIProviderProps = {
 };
 
 export function TaskUIProvider({ children }: TaskUIProviderProps) {
-  const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
-  const openCreateTask = () => {
-    setIsCreateTaskOpen(true);
+  const openTaskModal = () => {
+    setIsTaskModalOpen(true);
   };
 
-  const closeCreateTask = () => {
-    setIsCreateTaskOpen(false);
+  const closeTaskModal = () => {
+    setIsTaskModalOpen(false);
   };
 
   return (
     <TaskUIContext.Provider
       value={{
-        isCreateTaskOpen,
-        openCreateTask,
-        closeCreateTask,
+        isTaskModalOpen,
+        openTaskModal,
+        closeTaskModal,
       }}
     >
       {children}

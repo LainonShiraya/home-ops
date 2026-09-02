@@ -24,7 +24,7 @@ export type Task = {
   repetition: TaskRepetition;
 }
 
-export type CreateTaskInput = {
+export type TaskInput = {
   title: string
   category: string
   priority: TaskPriority
