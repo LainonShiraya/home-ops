@@ -2,6 +2,8 @@ import { useState, type ReactNode } from "react";
 import { households as initialHouseholds } from "../../data/households";
 import type { Household } from "../../types/household";
 import { HouseholdContext } from "./HouseholdContext";
+import { householdMembers as initialMembers } from "../../data/householdMembers";
+import type { HouseholdMember } from "../../types/householdMembers";
 
 type HouseholdProviderProps = {
   children: ReactNode;
@@ -9,10 +11,10 @@ type HouseholdProviderProps = {
 
 export function HouseholdProvider({ children }: HouseholdProviderProps) {
   const [households, setHouseholds] = useState<Household[]>(initialHouseholds);
-
   const [activeHouseholdId, setActiveHouseholdId] = useState(
     initialHouseholds[0]?.id ?? "",
   );
+  const [members] = useState<HouseholdMember[]>(initialMembers);
 
   const activeHousehold = households.find(
     (household) => household.id === activeHouseholdId,
@@ -47,6 +49,7 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
   return (
     <HouseholdContext.Provider
       value={{
+        members,
         households,
         activeHousehold,
         createHousehold,

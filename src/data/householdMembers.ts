@@ -1,7 +1,4 @@
-export type HouseholdMember = {
-  id: string;
-  name: string;
-};
+import type { HouseholdMember } from "../types/householdMembers";
 
 export const householdMembers: HouseholdMember[] = [
   {
