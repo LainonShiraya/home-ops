@@ -1,29 +1,33 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
 import CalendarPage from "./pages/CalendarPage";
-import DashboardPage from "./pages/DashboardPage";
+import DashboardPage from "./pages/Dashboard";
 import ExpensesPage from "./pages/ExpensesPage";
-import HouseholdPage from "./pages/HouseholdPage";
 import AppLayout from "./components/layout/AppLayout";
+import HouseholdPage from "./pages/HouseholdPage";
+
 import { TaskUIProvider } from "./context/TaskUIContext/TaskUIProvider";
+import { HouseholdProvider } from "./context/HouseholdContext/HouseholdProvider";
 function App() {
   return (
     <BrowserRouter>
-      <TaskUIProvider>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/tasks" element={<DashboardPage />} />
+      <HouseholdProvider>
+        <TaskUIProvider>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route path="/tasks" element={<DashboardPage />} />
 
-            <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
 
-            <Route path="/expenses" element={<ExpensesPage />} />
+              <Route path="/expenses" element={<ExpensesPage />} />
 
-            <Route path="/household" element={<HouseholdPage />} />
-          </Route>
+              <Route path="/household" element={<HouseholdPage />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/tasks" replace />} />
-        </Routes>
-      </TaskUIProvider>
+            <Route path="*" element={<Navigate to="/tasks" replace />} />
+          </Routes>
+        </TaskUIProvider>
+      </HouseholdProvider>
     </BrowserRouter>
   );
 }
