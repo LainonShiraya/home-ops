@@ -10,3 +10,18 @@ export const householdMembers: HouseholdMember[] = [
     name: "Anna",
   },
 ];
+
+export const householdMemberships = [
+  {
+    householdId: "home-001",
+    userId: "user-1",
+  },
+  {
+    householdId: "home-001",
+    userId: "user-2",
+  },
+  {
+    householdId: "home-002",
+    userId: "user-1",
+  },
+];

@@ -2,7 +2,10 @@ import { useState, type ReactNode } from "react";
 import { households as initialHouseholds } from "../../data/households";
 import type { Household } from "../../types/household";
 import { HouseholdContext } from "./HouseholdContext";
-import { householdMembers as initialMembers } from "../../data/householdMembers";
+import {
+  householdMemberships,
+  householdMembers as initialMembers,
+} from "../../data/householdMembers";
 import type { HouseholdMember } from "../../types/householdMembers";
 
 type HouseholdProviderProps = {
@@ -14,7 +17,13 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
   const [activeHouseholdId, setActiveHouseholdId] = useState(
     initialHouseholds[0]?.id ?? "",
   );
-  const [members] = useState<HouseholdMember[]>(initialMembers);
+
+  const members = householdMemberships
+    .filter((membership) => membership.householdId === activeHouseholdId)
+    .map((membership) =>
+      initialMembers.find((member) => member.id === membership.userId),
+    )
+    .filter((member): member is HouseholdMember => Boolean(member));
 
   const activeHousehold = households.find(
     (household) => household.id === activeHouseholdId,
