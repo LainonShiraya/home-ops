@@ -8,27 +8,33 @@ import TaskModal from "../components/tasks/TaskModal";
 import type { TaskInput, Task } from "../types/task";
 import TaskDeleteModal from "../components/tasks/TaskDeleteModal";
 import { useTasks } from "../hooks/useTasks";
+import { useHouseholds } from "../context/HouseholdContext/useHouseholds";
 
 function DashboardPage() {
+  const { activeHousehold } = useHouseholds();
   const [activeFilter, setActiveFilter] = useState<TaskFilter>("all");
   const { isTaskModalOpen, openTaskModal, closeTaskModal } = useTaskUI();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const { tasks, createTask, updateTask, deleteTask, toggleTaskStatus } =
     useTasks();
-  const myTasks = tasks.filter((task) => task.assigneeId === "user-1");
+  const householdTasks = tasks.filter(
+    (task) => task.householdId === activeHousehold?.id,
+  );
 
-  const completedTasks = tasks.filter((task) => task.status === "completed");
+  const myTasks = householdTasks.filter((task) => task.assigneeId === "user-1");
+
+  const completedTasks = householdTasks.filter(
+    (task) => task.status === "completed",
+  );
 
   const filteredTasks = sortTasksByPriority(
-    tasks.filter((task) => {
+    householdTasks.filter((task) => {
       switch (activeFilter) {
         case "mine":
           return task.assigneeId === "user-1";
-
         case "completed":
           return task.status === "completed";
-
         default:
           return true;
       }
