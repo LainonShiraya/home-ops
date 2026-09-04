@@ -1,4 +1,5 @@
-import { Bell, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
+import NotificationBell from "../notifications/NotificationBell";
 
 function AppHeader() {
   return (
@@ -15,7 +16,7 @@ function AppHeader() {
           aria-label="Powiadomienia"
           className="flex size-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
         >
-          <Bell size={20} />
+          <NotificationBell />
         </button>
 
         <button

@@ -8,25 +8,28 @@ import HouseholdPage from "./pages/HouseholdPage";
 
 import { TaskUIProvider } from "./context/TaskUIContext/TaskUIProvider";
 import { HouseholdProvider } from "./context/HouseholdContext/HouseholdProvider";
+import NotificationProvider from "./context/NotificationContext/NotificationProvider";
 function App() {
   return (
     <BrowserRouter>
       <HouseholdProvider>
-        <TaskUIProvider>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route path="/tasks" element={<DashboardPage />} />
+        <NotificationProvider>
+          <TaskUIProvider>
+            <Routes>
+              <Route element={<AppLayout />}>
+                <Route path="/tasks" element={<DashboardPage />} />
 
-              <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
 
-              <Route path="/expenses" element={<ExpensesPage />} />
+                <Route path="/expenses" element={<ExpensesPage />} />
 
-              <Route path="/household" element={<HouseholdPage />} />
-            </Route>
+                <Route path="/household" element={<HouseholdPage />} />
+              </Route>
 
-            <Route path="*" element={<Navigate to="/tasks" replace />} />
-          </Routes>
-        </TaskUIProvider>
+              <Route path="*" element={<Navigate to="/tasks" replace />} />
+            </Routes>
+          </TaskUIProvider>
+        </NotificationProvider>
       </HouseholdProvider>
     </BrowserRouter>
   );
