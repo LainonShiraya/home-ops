@@ -3,3 +3,8 @@ export type HouseholdMember = {
   name: string;
   avatar?: string;
 };
+export type HouseholdMembership = {
+  householdId: string;
+  userId: string;
+  role: "owner" | "member";
+};

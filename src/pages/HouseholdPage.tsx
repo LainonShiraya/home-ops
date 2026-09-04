@@ -5,14 +5,14 @@ import HouseholdModal from "../components/household/HouseholdModal";
 import { useState } from "react";
 import JoinHouseholdModal from "../components/household/JoinHouseholdModal";
 import HouseholdMembers from "../components/household/HouseholdMembers";
+import HouseholdEmptyState from "../components/household/HouseholdEmptyState";
 function HouseholdPage() {
   const { activeHousehold, createHousehold, joinHousehold } = useHouseholds();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
   if (!activeHousehold) {
-    return null;
+    return <HouseholdEmptyState />;
   }
-
   return (
     <main className="px-6 pb-24 lg:pb-6">
       <h1 className="pb-4 text-2xl font-bold text-slate-900">Mieszkanie</h1>

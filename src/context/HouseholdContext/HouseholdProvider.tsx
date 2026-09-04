@@ -3,22 +3,27 @@ import { households as initialHouseholds } from "../../data/households";
 import type { Household } from "../../types/household";
 import { HouseholdContext } from "./HouseholdContext";
 import {
-  householdMemberships,
+  householdMemberships as initialMemberships,
   householdMembers as initialMembers,
 } from "../../data/householdMembers";
-import type { HouseholdMember } from "../../types/householdMembers";
+import type {
+  HouseholdMember,
+  HouseholdMembership,
+} from "../../types/householdMembers";
 
 type HouseholdProviderProps = {
   children: ReactNode;
 };
 
 export function HouseholdProvider({ children }: HouseholdProviderProps) {
+  const [memberships, setMemberships] =
+    useState<HouseholdMembership[]>(initialMemberships);
   const [households, setHouseholds] = useState<Household[]>(initialHouseholds);
   const [activeHouseholdId, setActiveHouseholdId] = useState(
     initialHouseholds[0]?.id ?? "",
   );
 
-  const members = householdMemberships
+  const members = memberships
     .filter((membership) => membership.householdId === activeHouseholdId)
     .map((membership) =>
       initialMembers.find((member) => member.id === membership.userId),
@@ -36,6 +41,16 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
     };
 
     setHouseholds((prev) => [...prev, newHousehold]);
+
+    setMemberships((prev) => [
+      ...prev,
+      {
+        householdId: newHousehold.id,
+        userId: "user-1",
+        role: "owner",
+      },
+    ]);
+
     setActiveHouseholdId(newHousehold.id);
   };
 
@@ -55,15 +70,108 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
     setActiveHouseholdId(householdId);
   };
 
+  const getMemberRole = (userId: string) => {
+    return memberships.find(
+      (membership) =>
+        membership.householdId === activeHouseholdId &&
+        membership.userId === userId,
+    )?.role;
+  };
+  const deleteHousehold = (householdId: string) => {
+    const membership = memberships.find(
+      (membership) =>
+        membership.householdId === householdId &&
+        membership.userId === "user-1",
+    );
+
+    if (membership?.role !== "owner") {
+      return;
+    }
+
+    setHouseholds((prev) =>
+      prev.filter((household) => household.id !== householdId),
+    );
+
+    setMemberships((prev) =>
+      prev.filter((membership) => membership.householdId !== householdId),
+    );
+
+    if (activeHouseholdId === householdId) {
+      const nextHousehold = households.find(
+        (household) => household.id !== householdId,
+      );
+
+      setActiveHouseholdId(nextHousehold?.id ?? "");
+    }
+  };
+  const leaveHousehold = (householdId: string) => {
+    const membership = memberships.find(
+      (membership) =>
+        membership.householdId === householdId &&
+        membership.userId === "user-1",
+    );
+
+    if (!membership || membership.role === "owner") {
+      return;
+    }
+
+    setMemberships((prev) =>
+      prev.filter(
+        (membership) =>
+          !(
+            membership.householdId === householdId &&
+            membership.userId === "user-1"
+          ),
+      ),
+    );
+
+    if (activeHouseholdId === householdId) {
+      const nextHousehold = households.find(
+        (household) => household.id !== householdId,
+      );
+
+      setActiveHouseholdId(nextHousehold?.id ?? "");
+    }
+  };
+  const removeMember = (householdId: string, userId: string) => {
+    const ownerMembership = memberships.find(
+      (membership) =>
+        membership.householdId === householdId &&
+        membership.userId === "user-1",
+    );
+
+    if (ownerMembership?.role !== "owner") {
+      return;
+    }
+
+    if (userId === "user-1") {
+      return;
+    }
+
+    setMemberships((prev) =>
+      prev.filter(
+        (membership) =>
+          !(
+            membership.householdId === householdId &&
+            membership.userId === userId
+          ),
+      ),
+    );
+  };
   return (
     <HouseholdContext.Provider
       value={{
         members,
         households,
         activeHousehold,
+        memberships,
         createHousehold,
         joinHousehold,
         selectHousehold,
+        getMemberRole,
+        deleteHousehold,
+        leaveHousehold,
+        removeMember,
       }}
     >
       {children}

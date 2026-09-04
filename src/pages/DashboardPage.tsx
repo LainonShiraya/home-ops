@@ -9,6 +9,7 @@ import type { TaskInput, Task } from "../types/task";
 import TaskDeleteModal from "../components/tasks/TaskDeleteModal";
 import { useTasks } from "../hooks/useTasks";
 import { useHouseholds } from "../context/HouseholdContext/useHouseholds";
+import HouseholdEmptyState from "../components/household/HouseholdEmptyState";
 
 function DashboardPage() {
   const { activeHousehold } = useHouseholds();
@@ -69,7 +70,9 @@ function DashboardPage() {
     deleteTask(taskToDelete.id);
     setTaskToDelete(null);
   };
-
+  if (!activeHousehold) {
+    return <HouseholdEmptyState />;
+  }
   return (
     <main className="px-6 pb-24 lg:pb-6">
       <h1 className="text-2xl font-bold text-slate-900 pb-2 lg:pb-4">

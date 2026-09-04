@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
 import CalendarPage from "./pages/CalendarPage";
-import DashboardPage from "./pages/Dashboard";
+import DashboardPage from "./pages/DashboardPage";
 import ExpensesPage from "./pages/ExpensesPage";
 import AppLayout from "./components/layout/AppLayout";
 import HouseholdPage from "./pages/HouseholdPage";

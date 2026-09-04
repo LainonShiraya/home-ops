@@ -1,4 +1,4 @@
-import type { HouseholdMember } from "../types/householdMembers";
+import type { HouseholdMember, HouseholdMembership } from "../types/householdMembers";
 
 export const householdMembers: HouseholdMember[] = [
   {
@@ -11,17 +11,20 @@ export const householdMembers: HouseholdMember[] = [
   },
 ];
 
-export const householdMemberships = [
+export const householdMemberships: HouseholdMembership[] = [
   {
     householdId: "home-001",
     userId: "user-1",
+    role: "owner",
   },
   {
     householdId: "home-001",
     userId: "user-2",
+    role: "member",
   },
   {
     householdId: "home-002",
     userId: "user-1",
+    role: "owner",
   },
 ];
