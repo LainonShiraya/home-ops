@@ -82,7 +82,7 @@ function DashboardPage() {
       />
 
       <TaskStats
-        total={tasks.length}
+        total={householdTasks.length}
         myTasks={myTasks.length}
         completed={completedTasks.length}
       />

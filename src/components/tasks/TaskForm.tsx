@@ -7,8 +7,7 @@ import type {
   TaskPriority,
   TaskRepetition,
 } from "../../types/task";
-import { householdMembers } from "../../data/householdMembers";
-
+import { useHouseholds } from "../../context/HouseholdContext/useHouseholds";
 type TaskFormProps = {
   onSubmit: (input: TaskInput) => void;
   onCancel: () => void;
@@ -53,6 +52,8 @@ function SubmitButton({ isEditButton }: { isEditButton: boolean }) {
 }
 
 function TaskForm({ onSubmit, onCancel, initialValues }: TaskFormProps) {
+  const { members } = useHouseholds();
+
   const [priority, setPriority] = useState<TaskPriority>(
     initialValues?.priority ?? "medium",
   );
@@ -111,7 +112,6 @@ function TaskForm({ onSubmit, onCancel, initialValues }: TaskFormProps) {
       : todayString
     : todayString;
 
-  console.log("EDIT DATE:", initialValues?.dueDate);
   return (
     <form action={formAction} className="space-y-5">
       {/* Title */}
@@ -229,7 +229,7 @@ function TaskForm({ onSubmit, onCancel, initialValues }: TaskFormProps) {
             focus:ring-2 focus:ring-blue-100
           "
         >
-          {householdMembers.map((member) => (
+          {members.map((member) => (
             <option key={member.id} value={member.id}>
               {member.name}
             </option>
