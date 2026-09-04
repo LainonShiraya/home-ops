@@ -1,8 +1,8 @@
 import { CalendarDays, CircleCheck, Circle } from "lucide-react";
 import type { Task } from "../../types/task";
 import { formatDate } from "../../utils/date";
-import { householdMembers } from "../../data/householdMembers";
 import { repetitionLabels } from "../../utils/taskUtils";
+import { useHouseholds } from "../../context/HouseholdContext/useHouseholds";
 
 type TaskCardProps = {
   task: Task;
@@ -14,9 +14,9 @@ type TaskCardProps = {
 function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
   const isCompleted = task.status === "completed";
   const formattedDueDate = formatDate(task.dueDate);
-  const assignee = householdMembers.find(
-    (member) => member.id === task.assigneeId,
-  );
+  const { members } = useHouseholds();
+
+  const assignee = members.find((member) => member.id === task.assigneeId);
 
   return (
     <article

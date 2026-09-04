@@ -15,6 +15,7 @@ export const priorityWeight: Record<TaskPriority, number> = {
 }
 export type Task = {
   id: string
+  householdId: string;
   title: string
   category: string
   status: TaskStatus

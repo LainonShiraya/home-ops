@@ -3,6 +3,7 @@ import type { Task } from "../types/task"
 export const tasks: Task[] = [
   {
     id: "1",
+    householdId: "home-002",
     title: "Wynieś śmieci",
     category: "Dom",
     status: "todo",
@@ -13,6 +14,7 @@ export const tasks: Task[] = [
   },
   {
     id: "2",
+    householdId: "home-001",
     title: "Odkurzyć mieszkanie",
     category: "Sprzątanie",
     status: "in-progress",
@@ -23,6 +25,7 @@ export const tasks: Task[] = [
   },
   {
     id: "3",
+    householdId: "home-001",
     title: "Kupić mleko i chleb",
     category: "Zakupy",
     status: "completed",
@@ -33,6 +36,7 @@ export const tasks: Task[] = [
   },
   {
     id: "4",
+    householdId: "home-001",
     title: "Podlać kwiaty",
     category: "Dom",
     status: "todo",
@@ -43,6 +47,7 @@ export const tasks: Task[] = [
   },
   {
   id: "5",
+  householdId: "home-001",
   title: "Umyć łazienkę",
   category: "Sprzątanie",
   status: "todo",
@@ -53,6 +58,7 @@ export const tasks: Task[] = [
 },
 {
   id: "6",
+  householdId: "home-001",
   title: "Wynieść kartony",
   category: "Dom",
   status: "todo",
@@ -63,6 +69,7 @@ export const tasks: Task[] = [
 },
 {
   id: "7",
+  householdId: "home-001",
   title: "Zrobić pranie",
   category: "Pranie",
   status: "completed",
@@ -73,6 +80,7 @@ export const tasks: Task[] = [
 },
 {
   id: "8",
+  householdId: "home-001",
   title: "Kupić chemię gospodarczą",
   category: "Zakupy",
   status: "todo",
