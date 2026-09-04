@@ -10,9 +10,10 @@ import RewardModal from "./RewardModal";
 import RewardRedeemModal from "./RewardRedeemModal";
 import { useRewardRedemptions } from "../../hooks/useRewardRedemptions";
 import RewardRedemptionHistory from "./RewardRedemptionHistory";
+import { useNotifications } from "../../context/NotificationContext/useNotifications";
 function ShopSection() {
   const { activeHousehold, members } = useHouseholds();
-
+  const { addNotification } = useNotifications();
   const { rewards, createReward, updateReward, deleteReward } = useRewards();
   const { currentUserPoints, spendPoints } = useHouseholdPoints();
   const { addRedemption, householdRedemptions } = useRewardRedemptions();
@@ -28,7 +29,6 @@ function ShopSection() {
   if (!activeHousehold) {
     return null;
   }
-
   const householdRewards = rewards.filter(
     (reward) => reward.householdId === activeHousehold.id,
   );
@@ -212,7 +212,28 @@ function ShopSection() {
             return;
           }
 
-          addRedemption(rewardToRedeem.id, rewardToRedeem.cost, "user-1");
+          const redeemedBy = "user-1";
+
+          addRedemption(rewardToRedeem.id, rewardToRedeem.cost, redeemedBy);
+          const redeemer = members.find((member) => member.id === redeemedBy);
+
+          addNotification({
+            householdId: rewardToRedeem.householdId,
+            userId: redeemedBy,
+            type: "reward-redeemed-by-me",
+            title: "Wykorzystano nagrodę",
+            message: `Wykorzystałeś „${rewardToRedeem.title}” za ${rewardToRedeem.cost} pkt.`,
+          });
+
+          if (rewardToRedeem.createdBy !== redeemedBy) {
+            addNotification({
+              householdId: rewardToRedeem.householdId,
+              userId: rewardToRedeem.createdBy,
+              type: "reward-redeemed",
+              title: "Twoja nagroda została wykorzystana",
+              message: `${redeemer?.name ?? "Ktoś"} wykorzystał „${rewardToRedeem.title}” za ${rewardToRedeem.cost} pkt.`,
+            });
+          }
 
           setRewardToRedeem(null);
         }}

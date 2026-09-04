@@ -1,8 +1,7 @@
 import { Bell } from "lucide-react";
 import { useState } from "react";
 
-import { useNotifications } from "../../hooks/useNotifications";
-
+import { useNotifications } from "../../context/NotificationContext/useNotifications";
 function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
 
