@@ -39,10 +39,27 @@ export function useHouseholdPoints() {
 
     return true;
   };
+const addPoints = (userId: string, amount: number) => {
+  if (!activeHousehold || amount <= 0) {
+    return;
+  }
 
+  setPoints((prev) =>
+    prev.map((entry) =>
+      entry.householdId === activeHousehold.id &&
+      entry.userId === userId
+        ? {
+            ...entry,
+            points: entry.points + amount,
+          }
+        : entry,
+    ),
+  );
+};
   return {
     points,
     currentUserPoints,
     spendPoints,
+    addPoints,
   };
 }

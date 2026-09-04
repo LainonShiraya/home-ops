@@ -10,12 +10,12 @@ const filters: {
   value: TaskFilter;
 }[] = [
   {
-    label: "Wszystkie",
-    value: "all",
-  },
-  {
     label: "Moje",
     value: "mine",
+  },
+  {
+    label: "Wszystkie",
+    value: "all",
   },
   {
     label: "Ukończone",

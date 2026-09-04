@@ -13,17 +13,21 @@ export const priorityWeight: Record<TaskPriority, number> = {
   medium: 1,
   low: 2,
 }
+
 export type Task = {
-  id: string
+  id: string;
   householdId: string;
-  title: string
-  category: string
-  status: TaskStatus
-  priority: TaskPriority
-  assigneeId: string
-  dueDate: string
+  title: string;
+  category: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  assigneeId: string;
+  dueDate: string;
   repetition: TaskRepetition;
-}
+  pointsAwarded: number;
+  pointsAwardedTo?: string;
+  createdBy: string;
+};
 
 export type TaskInput = {
   title: string

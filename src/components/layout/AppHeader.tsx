@@ -11,13 +11,7 @@ function AppHeader() {
       </div>
 
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          aria-label="Powiadomienia"
-          className="flex size-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100"
-        >
-          <NotificationBell />
-        </button>
+        <NotificationBell />
 
         <button
           type="button"

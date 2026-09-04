@@ -11,6 +11,8 @@ export const tasks: Task[] = [
     assigneeId: "user-1",
     repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
+    pointsAwarded: 0,
+    createdBy: 'user-1',
   },
   {
     id: "2",
@@ -22,6 +24,8 @@ export const tasks: Task[] = [
     assigneeId: "user-1",
     repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
+    pointsAwarded: 0,
+    createdBy: 'user-1',
   },
   {
     id: "3",
@@ -33,6 +37,8 @@ export const tasks: Task[] = [
     assigneeId: "user-1",
     repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
+    pointsAwarded: 0,
+    createdBy: 'user-1',
   },
   {
     id: "4",
@@ -44,6 +50,8 @@ export const tasks: Task[] = [
     assigneeId: "user-2",
     repetition: "weekly",
     dueDate: "2026-09-09T18:00:00",
+    pointsAwarded: 0,
+    createdBy: 'user-1',
   },
   {
   id: "5",
@@ -55,6 +63,8 @@ export const tasks: Task[] = [
   assigneeId: "user-2",
   repetition: "none",
   dueDate: "2026-09-09T18:00:00",
+  pointsAwarded: 0,
+  createdBy: 'user-1',
 },
 {
   id: "6",
@@ -66,6 +76,8 @@ export const tasks: Task[] = [
   assigneeId: "user-2",
   repetition: "none",
  dueDate: "2026-09-09T18:00:00",
+ pointsAwarded: 0,
+ createdBy: 'user-2',
 },
 {
   id: "7",
@@ -77,6 +89,8 @@ export const tasks: Task[] = [
   assigneeId: "user-2",
   repetition: "none",
   dueDate: "2026-09-09T18:00:00",
+  pointsAwarded: 0,
+  createdBy: 'user-1',
 },
 {
   id: "8",
@@ -88,5 +102,7 @@ export const tasks: Task[] = [
   assigneeId: "user-1",
   repetition: "monthly",
   dueDate: "2026-09-09T18:00:00",
+  pointsAwarded: 0,
+  createdBy: 'user-1',
 },
 ]

@@ -1,6 +1,7 @@
 export type NotificationType =
   | "reward-redeemed"
-  | "reward-redeemed-by-me";
+  | "reward-redeemed-by-me"
+  | "task-completed";
 
 export type Notification = {
   id: string;

@@ -15,8 +15,9 @@ function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
   const isCompleted = task.status === "completed";
   const formattedDueDate = formatDate(task.dueDate);
   const { members } = useHouseholds();
-
   const assignee = members.find((member) => member.id === task.assigneeId);
+  const currentUserId = "user-1";
+  const canComplete = task.assigneeId === currentUserId;
 
   return (
     <article
@@ -31,13 +32,28 @@ function TaskCard({ task, onToggle, onEdit, onDelete }: TaskCardProps) {
     >
       <button
         type="button"
+        disabled={!canComplete}
         onClick={() => onToggle(task.id)}
         aria-label={
           isCompleted
             ? `Oznacz "${task.title}" jako niewykonane`
             : `Oznacz "${task.title}" jako wykonane`
         }
-        className="mt-0.5 shrink-0 text-slate-400 transition hover:text-blue-600"
+        title={
+          canComplete
+            ? isCompleted
+              ? "Oznacz jako niewykonane"
+              : "Oznacz jako wykonane"
+            : `Tylko ${assignee?.name ?? "przypisana osoba"} może ukończyć to zadanie`
+        }
+        className={`
+    mt-0.5 shrink-0 transition
+    ${
+      canComplete
+        ? "cursor-pointer text-slate-400 hover:text-blue-600"
+        : "cursor-not-allowed text-slate-300 opacity-60"
+    }
+  `}
       >
         {isCompleted ? (
           <CircleCheck className="text-blue-600" size={22} />

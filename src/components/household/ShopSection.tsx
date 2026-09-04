@@ -4,7 +4,6 @@ import { EllipsisVertical, Gift } from "lucide-react";
 import { useHouseholds } from "../../context/HouseholdContext/useHouseholds";
 import { useRewards } from "../../hooks/useRewards";
 import type { Reward } from "../../types/reward";
-import { useHouseholdPoints } from "../../hooks/useHouseholdPoints";
 import RewardActionModal from "./RewardActionModal";
 import RewardModal from "./RewardModal";
 import RewardRedeemModal from "./RewardRedeemModal";
@@ -12,10 +11,10 @@ import { useRewardRedemptions } from "../../hooks/useRewardRedemptions";
 import RewardRedemptionHistory from "./RewardRedemptionHistory";
 import { useNotifications } from "../../context/NotificationContext/useNotifications";
 function ShopSection() {
-  const { activeHousehold, members } = useHouseholds();
+  const { activeHousehold, members, currentUserPoints, spendPoints } =
+    useHouseholds();
   const { addNotification } = useNotifications();
   const { rewards, createReward, updateReward, deleteReward } = useRewards();
-  const { currentUserPoints, spendPoints } = useHouseholdPoints();
   const { addRedemption, householdRedemptions } = useRewardRedemptions();
   const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
 
