@@ -1,4 +1,3 @@
-import { Store } from "lucide-react";
 import { useHouseholds } from "../context/HouseholdContext/useHouseholds";
 import HouseholdSwitcher from "../components/household/HouseholdSwitcher";
 import HouseholdModal from "../components/household/HouseholdModal";
@@ -6,6 +5,7 @@ import { useState } from "react";
 import JoinHouseholdModal from "../components/household/JoinHouseholdModal";
 import HouseholdMembers from "../components/household/HouseholdMembers";
 import HouseholdEmptyState from "../components/household/HouseholdEmptyState";
+import ShopSection from "../components/household/ShopSection";
 function HouseholdPage() {
   const { activeHousehold, createHousehold, joinHousehold } = useHouseholds();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,10 +38,7 @@ function HouseholdPage() {
       </div>
       <section className="mt-6 space-y-3">
         <HouseholdMembers />
-        <button className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left">
-          <Store size={20} />
-          <span className="font-medium">Sklepik</span>
-        </button>
+        <ShopSection />
       </section>
       <HouseholdModal
         isOpen={isModalOpen}

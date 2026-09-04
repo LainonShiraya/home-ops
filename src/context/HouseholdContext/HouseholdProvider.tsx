@@ -1,15 +1,21 @@
 import { useState, type ReactNode } from "react";
+
 import { households as initialHouseholds } from "../../data/households";
+import { householdPoints as initialHouseholdPoints } from "../../data/households";
+
 import type { Household } from "../../types/household";
-import { HouseholdContext } from "./HouseholdContext";
-import {
-  householdMemberships as initialMemberships,
-  householdMembers as initialMembers,
-} from "../../data/householdMembers";
+import type { HouseholdPoints } from "../../types/household";
 import type {
   HouseholdMember,
   HouseholdMembership,
 } from "../../types/householdMembers";
+
+import {
+  householdMemberships as initialMemberships,
+  householdMembers as initialMembers,
+} from "../../data/householdMembers";
+
+import { HouseholdContext } from "./HouseholdContext";
 
 type HouseholdProviderProps = {
   children: ReactNode;
@@ -18,9 +24,19 @@ type HouseholdProviderProps = {
 export function HouseholdProvider({ children }: HouseholdProviderProps) {
   const [memberships, setMemberships] =
     useState<HouseholdMembership[]>(initialMemberships);
+
   const [households, setHouseholds] = useState<Household[]>(initialHouseholds);
+
+  const [points, setPoints] = useState<HouseholdPoints[]>(
+    initialHouseholdPoints,
+  );
+
   const [activeHouseholdId, setActiveHouseholdId] = useState(
     initialHouseholds[0]?.id ?? "",
+  );
+
+  const activeHousehold = households.find(
+    (household) => household.id === activeHouseholdId,
   );
 
   const members = memberships
@@ -30,8 +46,9 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
     )
     .filter((member): member is HouseholdMember => Boolean(member));
 
-  const activeHousehold = households.find(
-    (household) => household.id === activeHouseholdId,
+  const currentUserPoints = points.find(
+    (entry) =>
+      entry.householdId === activeHouseholdId && entry.userId === "user-1",
   );
 
   const createHousehold = (name: string) => {
@@ -48,6 +65,15 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
         householdId: newHousehold.id,
         userId: "user-1",
         role: "owner",
+      },
+    ]);
+
+    setPoints((prev) => [
+      ...prev,
+      {
+        householdId: newHousehold.id,
+        userId: "user-1",
+        points: 0,
       },
     ]);
 
@@ -77,6 +103,7 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
         membership.userId === userId,
     )?.role;
   };
+
   const deleteHousehold = (householdId: string) => {
     const membership = memberships.find(
       (membership) =>
@@ -96,6 +123,10 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
       prev.filter((membership) => membership.householdId !== householdId),
     );
 
+    setPoints((prev) =>
+      prev.filter((entry) => entry.householdId !== householdId),
+    );
+
     if (activeHouseholdId === householdId) {
       const nextHousehold = households.find(
         (household) => household.id !== householdId,
@@ -104,6 +135,7 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
       setActiveHouseholdId(nextHousehold?.id ?? "");
     }
   };
+
   const leaveHousehold = (householdId: string) => {
     const membership = memberships.find(
       (membership) =>
@@ -133,6 +165,7 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
       setActiveHouseholdId(nextHousehold?.id ?? "");
     }
   };
+
   const removeMember = (householdId: string, userId: string) => {
     const ownerMembership = memberships.find(
       (membership) =>
@@ -158,6 +191,47 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
       ),
     );
   };
+
+  const addPoints = (userId: string, amount: number) => {
+    if (!activeHousehold || amount === 0) {
+      return;
+    }
+
+    setPoints((prev) =>
+      prev.map((entry) =>
+        entry.householdId === activeHousehold.id && entry.userId === userId
+          ? {
+              ...entry,
+              points: entry.points + amount,
+            }
+          : entry,
+      ),
+    );
+  };
+
+  const spendPoints = (amount: number) => {
+    if (!activeHousehold || !currentUserPoints) {
+      return false;
+    }
+
+    if (amount <= 0 || currentUserPoints.points < amount) {
+      return false;
+    }
+
+    setPoints((prev) =>
+      prev.map((entry) =>
+        entry.householdId === activeHousehold.id && entry.userId === "user-1"
+          ? {
+              ...entry,
+              points: entry.points - amount,
+            }
+          : entry,
+      ),
+    );
+
+    return true;
+  };
+
   return (
     <HouseholdContext.Provider
       value={{
@@ -165,6 +239,8 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
         households,
         activeHousehold,
         memberships,
+        points,
+        currentUserPoints,
         createHousehold,
         joinHousehold,
         selectHousehold,
@@ -172,6 +248,8 @@ export function HouseholdProvider({ children }: HouseholdProviderProps) {
         deleteHousehold,
         leaveHousehold,
         removeMember,
+        addPoints,
+        spendPoints,
       }}
     >
       {children}

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { Household } from "../../types/household";
+import type { Household, HouseholdPoints } from "../../types/household";
 import type {
   HouseholdMember,
   HouseholdMembership,
@@ -17,6 +17,10 @@ export type HouseholdContextValue = {
   deleteHousehold: (householdId: string) => void;
   leaveHousehold: (householdId: string) => void;
   removeMember: (householdId: string, userId: string) => void;
+  points: HouseholdPoints[];
+  currentUserPoints: HouseholdPoints | undefined;
+  addPoints: (userId: string, amount: number) => void;
+  spendPoints: (amount: number) => boolean;
 };
 
 export const HouseholdContext = createContext<HouseholdContextValue | null>(

@@ -1,4 +1,4 @@
-import { priorityWeight, type Task, type TaskRepetition } from "../types/task"
+import { priorityWeight, type Task, type TaskRepetition, type TaskPriority } from "../types/task"
 
 export function toggleTask(task: Task): Task {
   return {
@@ -29,4 +29,15 @@ export const repetitionLabels: Record<TaskRepetition, string> = {
   daily: "Codziennie",
   weekly: "Co tydzień",
   monthly: "Co miesiąc",
+};
+
+export const getTaskPoints = (priority: TaskPriority) => {
+  switch (priority) {
+    case "high":
+      return 15;
+    case "medium":
+      return 10;
+    case "low":
+      return 5;
+  }
 };

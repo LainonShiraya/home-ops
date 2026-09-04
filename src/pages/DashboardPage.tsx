@@ -7,13 +7,13 @@ import { useTaskUI } from "../context/TaskUIContext/useTaskUI";
 import TaskModal from "../components/tasks/TaskModal";
 import type { TaskInput, Task } from "../types/task";
 import TaskDeleteModal from "../components/tasks/TaskDeleteModal";
-import { useTasks } from "../hooks/useTasks";
 import { useHouseholds } from "../context/HouseholdContext/useHouseholds";
 import HouseholdEmptyState from "../components/household/HouseholdEmptyState";
+import { useTasks } from "../context/TaskContext/useTasks";
 
 function DashboardPage() {
   const { activeHousehold } = useHouseholds();
-  const [activeFilter, setActiveFilter] = useState<TaskFilter>("all");
+  const [activeFilter, setActiveFilter] = useState<TaskFilter>("mine");
   const { isTaskModalOpen, openTaskModal, closeTaskModal } = useTaskUI();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
