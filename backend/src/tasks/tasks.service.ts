@@ -1,19 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class TasksService {
+  constructor(private readonly prisma: PrismaService) {}
+
   findAll() {
-    return [
-      {
-        id: '1',
-        title: 'Umyć łazienkę',
-        status: 'todo',
-      },
-      {
-        id: '2',
-        title: 'Wynieść kartony',
-        status: 'completed',
-      },
-    ];
+    return this.prisma.db.orm.public.Task.all();
   }
 }
